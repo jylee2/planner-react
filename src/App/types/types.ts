@@ -16,3 +16,10 @@ export type ReducerState = {
   loggedInUser: any;
   jwt: any;
 };
+
+export type AuthInputType = {
+  name?: string;
+  email?: string;
+  username?: string;
+  password?: string;
+};
