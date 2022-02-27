@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { memo, useState, useCallback, SyntheticEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -13,34 +13,14 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Button from "@mui/material/Button";
 
-// export const action = async ({ request }: ActionType) => {
-//   const form = await request.formData();
-
-//   const email = form.get("email")
-//   const password = form.get("password")
-//   if (!email || !password) {
-//     return {
-//       message: 'Please enter your email and password.'
-//     }
-//   }
-
-//   const fields = { email, password }
-
-//   const res = await login(fields)
-
-//   if (res.success) {
-//     return createUserSession(res.userUuid, '/')
-//   }
-
-//   return res
-// };
-
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
-    email: "",
+    username: "",
     password: "",
     showPassword: false,
   });
+  const [error, setError] = useState("");
 
   const onFormChange = useCallback(
     (prop: any) => (event: any) => {
@@ -56,27 +36,76 @@ const LoginPage = () => {
     });
   }, [values]);
 
-  const handleMouseDownPassword = useCallback((event: any) => {
+  const handleMouseDownPassword = useCallback((event: SyntheticEvent) => {
     event.preventDefault();
   }, []);
 
+  const onSubmit = useCallback(
+    async (event: SyntheticEvent) => {
+      event.preventDefault();
+
+      const input = {
+        username: values.username,
+        password: values.password,
+      };
+      if (!input.username.length || !input.password.length) {
+        return setError("Please enter your username and password.");
+      }
+
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BASE_URL}/api/login`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(input),
+          }
+        );
+
+        const content = await response.json();
+
+        if (content?.success) {
+          return navigate("/");
+        }
+        if (content?.message) {
+          return setError(content?.message);
+        }
+
+        return setError("An error occurred, please try again later.");
+      } catch (error) {
+        console.log("--------Error when logging in.", error);
+      }
+    },
+    [navigate, values]
+  );
+
   return (
-    <Box>
+    <div
+      style={{
+        margin: "10px",
+        padding: 0,
+        height: "75vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Typography variant="h5" gutterBottom component="div" sx={{ m: 1 }}>
         Login
       </Typography>
 
       <form method="POST">
         <TextField
-          id="email"
-          label="Email"
+          id="username"
+          label="Username"
           variant="outlined"
-          type="email"
-          placeholder="hello@example.com"
-          value={values.email}
-          onChange={onFormChange("email")}
+          type="username"
+          placeholder="username"
+          value={values.username}
+          onChange={onFormChange("username")}
           sx={{ m: 1, width: "100%" }}
-          name="email"
+          name="username"
         />
         <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">
@@ -104,14 +133,22 @@ const LoginPage = () => {
           />
         </FormControl>
 
-        {/* {
-          actionData?.message &&
-          <Typography variant="subtitle1" gutterBottom component="div" sx={{ m: 1 }}>
-            {actionData?.message}
-          </Typography>
-        } */}
+        <Typography
+          align="left"
+          variant="subtitle1"
+          gutterBottom
+          component="div"
+          sx={{ m: 1 }}
+        >
+          {error}
+        </Typography>
 
-        <Button sx={{ m: 1, width: "100%" }} variant="outlined" type="submit">
+        <Button
+          sx={{ m: 1, width: "100%" }}
+          variant="outlined"
+          type="submit"
+          onClick={onSubmit}
+        >
           Login
         </Button>
       </form>
@@ -121,8 +158,8 @@ const LoginPage = () => {
           Register
         </Link>
       </Box>
-    </Box>
+    </div>
   );
 };
 
-export default LoginPage;
+export default memo(LoginPage);
