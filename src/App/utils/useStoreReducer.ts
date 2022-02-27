@@ -10,8 +10,8 @@ const Reducer = (state: ReducerState, action: ReducerAction) => {
     case ACTION.LOGIN:
       return {
         ...state,
-        loggedInUser: action.payload,
-        jwt: null,
+        loggedInUser: null,
+        jwt: action.payload,
       };
     case ACTION.LOGOUT:
       return {

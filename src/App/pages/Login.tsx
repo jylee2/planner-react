@@ -1,6 +1,8 @@
 import { memo, useState, useCallback, SyntheticEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import auth from "../utils/auth";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -53,16 +55,7 @@ const LoginPage = () => {
       }
 
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/api/login`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(input),
-          }
-        );
-
-        const content = await response.json();
+        const content = await auth.login(input);
 
         if (content?.success) {
           return navigate("/");
