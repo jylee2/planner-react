@@ -1,4 +1,10 @@
-import { useState, useCallback, ChangeEvent, SyntheticEvent } from "react";
+import {
+  memo,
+  useState,
+  useCallback,
+  ChangeEvent,
+  SyntheticEvent,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
@@ -52,7 +58,6 @@ const RegisterPage = () => {
         username: values.username,
         password: values.password,
       };
-      console.log("--------input.password?.length", input.password?.length);
       if (input.password?.length < 8) {
         return setError("Password must have at least 8 characters.");
       }
@@ -75,6 +80,8 @@ const RegisterPage = () => {
         if (content?.message) {
           return setError(content?.message);
         }
+
+        return setError("An error occurred, please try again later.");
       } catch (error) {
         console.log("--------Error when registering user.", error);
       }
@@ -87,7 +94,6 @@ const RegisterPage = () => {
       style={{
         margin: "10px",
         padding: 0,
-        maxWidth: "300px",
         height: "75vh",
         display: "flex",
         flexDirection: "column",
@@ -194,4 +200,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default memo(RegisterPage);
