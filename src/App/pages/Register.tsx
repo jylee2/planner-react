@@ -84,6 +84,7 @@ const RegisterPage = () => {
         return setError("An error occurred, please try again later.");
       } catch (error) {
         console.log("--------Error when registering user.", error);
+        return setError("Failed to register.");
       }
     },
     [navigate, values]
@@ -94,108 +95,108 @@ const RegisterPage = () => {
       style={{
         margin: "10px",
         padding: 0,
-        height: "75vh",
+        height: "80vh",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      <Typography
-        align="left"
-        variant="h5"
-        gutterBottom
-        component="div"
-        sx={{ m: 1 }}
-      >
-        Register
-      </Typography>
-
-      <form method="POST">
-        <TextField
-          id="username"
-          label="Username"
-          variant="outlined"
-          type="username"
-          placeholder="username"
-          value={values.username}
-          onChange={onFormChange("username")}
-          sx={{ m: 1, width: "100%" }}
-          name="username"
-        />
-        <TextField
-          id="name"
-          label="Name"
-          variant="outlined"
-          type="name"
-          placeholder="John Doe"
-          value={values.name}
-          onChange={onFormChange("name")}
-          sx={{ m: 1, width: "100%" }}
-          name="name"
-        />
-        <TextField
-          id="email"
-          label="Email"
-          variant="outlined"
-          type="email"
-          placeholder="hello@example.com"
-          value={values.email}
-          onChange={onFormChange("email")}
-          sx={{ m: 1, width: "100%" }}
-          name="email"
-        />
-        <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">
-            Password
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? "text" : "password"}
-            value={values.password}
-            onChange={onFormChange("password")}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-            name="password"
-          />
-        </FormControl>
-
-        <Typography
-          align="left"
-          variant="subtitle1"
-          gutterBottom
-          component="div"
-          sx={{ m: 1 }}
-        >
-          {error}
+      <div style={{ maxWidth: "340px", textAlign: "center" }}>
+        <Typography variant="h5" gutterBottom component="div" sx={{ m: 1 }}>
+          Register
         </Typography>
 
-        <Button
-          sx={{ m: 1, width: "100%" }}
-          variant="outlined"
-          type="submit"
-          onClick={onSubmit}
-        >
-          Register
-        </Button>
-      </form>
+        <Box sx={{ m: 1 }}>
+          <form method="POST">
+            <TextField
+              id="username"
+              label="Username"
+              variant="outlined"
+              type="username"
+              placeholder="username"
+              value={values.username}
+              onChange={onFormChange("username")}
+              sx={{ mt: 1, width: "100%" }}
+              name="username"
+            />
+            <TextField
+              id="name"
+              label="Name"
+              variant="outlined"
+              type="name"
+              placeholder="John Doe"
+              value={values.name}
+              onChange={onFormChange("name")}
+              sx={{ mt: 1, width: "100%" }}
+              name="name"
+            />
+            <TextField
+              id="email"
+              label="Email"
+              variant="outlined"
+              type="email"
+              placeholder="hello@example.com"
+              value={values.email}
+              onChange={onFormChange("email")}
+              sx={{ mt: 1, width: "100%" }}
+              name="email"
+            />
+            <FormControl sx={{ mt: 1, width: "100%" }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={values.showPassword ? "text" : "password"}
+                value={values.password}
+                onChange={onFormChange("password")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+                name="password"
+              />
+            </FormControl>
 
-      <Box sx={{ m: 1 }}>
-        <Link to="/login" color="secondary">
-          Login
-        </Link>
-      </Box>
+            <Typography
+              align="left"
+              variant="subtitle1"
+              gutterBottom
+              component="div"
+              sx={{ mt: 1 }}
+              style={{ color: "red", fontSize: "12px" }}
+            >
+              {error}
+            </Typography>
+
+            <Button
+              sx={{ mt: 1, width: "100%" }}
+              variant="outlined"
+              type="submit"
+              onClick={onSubmit}
+            >
+              Register
+            </Button>
+          </form>
+        </Box>
+
+        <Box sx={{ m: 1 }}>
+          <Link to="/login" color="secondary">
+            Login
+          </Link>
+        </Box>
+      </div>
     </div>
   );
 };
